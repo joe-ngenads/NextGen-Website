@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Builder - NextGen Advertising</title>
+    <meta name="description" content="Interactive advertising package builder for Ohio BMV locations.">
+    
+    <!-- Fonts & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="NG-favicon.png">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+</head>
+<body class="builder-body">
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="logo-link">
+                <img src="NG-sidebyside.png" alt="NextGen Logo" class="logo">
+            </a>
+           <nav class="main-nav">
+  <ul class="nav-list">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+<div class="mobile-menu">
+  <button class="close-menu">×</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Contact</a>
+</div>
+
+    <!-- Main Application -->
+    <main id="app" x-data="packageBuilder()" x-init="initApp()">
+        
+        <!-- Step 1 & 2: Builder Interface -->
+<!-- Builder Hero + Trust -->
+<!-- Builder Hero + Trust -->
+<section class="builder-hero">
+  <div class="builder-hero-inner">
+    <div class="builder-hero-left">
+      <span class="builder-hero-badge">
+  
+  Easy as 1-2-3
+</span>
+
+      <h1 class="builder-hero-title">Build a targeted campaign across Ohio's BMV network</h1>
+      <p class="builder-hero-subtitle">
+        Select locations, choose your ad format, and see real-time pricing with stacked volume discounts.
+      </p>
+
+      <ul class="builder-hero-bullets">
+        <li><strong>150+ locations</strong> across Ohio</li>
+        <li>
+          <strong>Data-driven impressions</strong> based on official BMV queueing reports
+          <button class="info-tooltip-trigger" @click.prevent="$refs.impressionsTooltip.classList.toggle('visible')" aria-label="How impressions are calculated">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1"/>
+              <path d="M7 6V10M7 4.5V4.51" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="info-tooltip" x-ref="impressionsTooltip">
+            <div class="info-tooltip-content">
+              Impressions are calculated from official Ohio BMV queueing reports, which measure customer volume and average lobby + counter wait times at each location.
+            </div>
+          </div>
+        </li>
+        <li><strong>Fast setup</strong> — get pricing instantly, submit creative after checkout</li>
+      </ul>
+
+      <div class="builder-hero-cta-row">
+        <a class="btn btn-primary builder-hero-cta" href="#step-1">Build Your Package</a>
+        <span class="builder-hero-cta-note">*No uploads required right now*</span>
+      </div>
+    </div>
+<div class="builder-hero-right">
+      <!-- Trust Card -->
+      <div class="builder-trust-card">
+
+        <h3>Exclusive placements in participating Deputy Registrar offices</h3>
+        <p class="builder-trust-copy">
+          NextGen contracts directly with each location to manage third-party ad placements on lobby displays.
+        </p>
+<div class="builder-trust-metrics">
+          <div class="trust-metric">
+            <span class="trust-icon">📊</span>
+            <div class="trust-metric-content">
+              <span class="trust-metric-label">Accurate Impression Source</span>
+              <span class="trust-metric-value">Official agency-specific BMV queueing reports</span>
+            </div>
+          </div>
+          <div class="trust-metric">
+            <span class="trust-icon">⏱️</span>
+            <div class="trust-metric-content">
+              <span class="trust-metric-label">What's measured</span>
+              <span class="trust-metric-value">Total queued + dwell time</span>
+            </div>
+          </div>
+          <div class="trust-metric">
+            <span class="trust-icon">🔒</span>
+            <div class="trust-metric-content">
+              <span class="trust-metric-label">Reliability</span>
+              <span class="trust-metric-value">Distributed playback (no single point of failure)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="builder-logo-row" aria-label="Trusted by">
+          <span class="logo-pill">Auto Repair</span>
+          <span class="logo-pill">Home Services</span>
+          <span class="logo-pill">Insurance</span>
+          <span class="logo-pill">Health</span>
+          <span class="logo-pill">Restaurant</span>
+          <span class="logo-pill">Retail</span>
+        </div>
+
+        <div class="builder-testimonial">
+          <p class="testimonial-quote">
+            "Easy to work with, great suggestions, would highly recommend them!"
+          </p>
+          <p class="testimonial-meta">— Jacki Mayer, Ohio</p>
+       </div>
+      </div>
+
+      <!-- BMV Display Image -->
+      <div class="builder-hero-image">
+        <img 
+          src="locationdisplay0.jpeg" 
+          alt="NextGen advertising display screen at Ohio BMV location showing ads on lobby TV"
+          loading="lazy"
+          class="hero-display-image"
+        >
+        <div class="image-caption">
+          Montgomery BMV - Cincinnati, Ohio
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 4: Trusted Organizations Logo Row -->
+<section class="trusted-orgs-section">
+  <div class="trusted-orgs-inner">
+    <p class="trusted-orgs-label">Trusted by organizations across Ohio</p>
+   <div class="trusted-logos-row">
+      <!-- U.S. Army -->
+      <div class="trusted-logo-item">
+        <img src="army.png" alt="U.S. Army">
+      </div>
+      
+      <!-- Healthcare -->
+      <div class="trusted-logo-item logo-icon-based">
+        <i class="fas fa-heartbeat"></i>
+        <span>Healthcare</span>
+      </div>
+      
+      <!-- Auto Services -->
+      <div class="trusted-logo-item logo-icon-based">
+        <i class="fas fa-car"></i>
+        <span>Auto Services</span>
+      </div>
+      
+      <!-- Insurance -->
+      <div class="trusted-logo-item logo-icon-based">
+        <i class="fas fa-shield-alt"></i>
+        <span>Insurance</span>
+      </div>
+      
+      <!-- Legal Services -->
+      <div class="trusted-logo-item logo-icon-based">
+        <i class="fas fa-balance-scale"></i>
+        <span>Legal</span>
+      </div>
+      
+      <!-- Real Estate -->
+      <div class="trusted-logo-item logo-icon-based">
+        <i class="fas fa-home"></i>
+        <span>Real Estate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+ <div class="builder-layout" x-show="step === 1">
+<div class="builder-page-head">
+  <h1>Build Your Advertising Package</h1>
+  <p>Select locations, customize your campaign, and review pricing in real time.</p>
+</div>
+
+<div class="builder-step-head" id="step-1">
+
+  <div class="step-kicker">Step 1</div>
+  <h2>Choose Locations</h2>
+  <p>Use the map, search, and sorting tools to find and select your target BMV offices across Ohio.</p>
+</div>
+
+  <div class="builder-shell">
+  <!-- Top: Map (left) + List (right) -->
+<div class="builder-section-card">  
+<section class="builder-top">
+    <!-- Map -->
+    <div class="builder-map">
+      <div class="map-container" id="map"></div>
+    </div>
+<!-- Mobile-only: scroll handle + quick guidance -->
+<div class="mobile-scroll-hint">
+  <div class="mobile-scroll-hint-inner">
+    <div class="scroll-grabber" aria-hidden="true"></div>
+    <p>
+      Tip: Use <strong>Search</strong> to find a city/county, or <strong>Sort</strong> to prioritize impressions.
+      Tap pins to add locations.
+    </p>
+  </div>
+</div>
+
+    <!-- List -->
+    <div class="builder-list">
+      <div class="list-controls">
+        <input type="text" x-model="searchQuery" placeholder="Search City, County, or Region..." class="search-input">
+        <select x-model="sortBy" class="sort-select">
+
+	  <option value="county">Sort by County (A–Z)</option>
+
+          <option value="impressions">Sort by Impressions (High-Low)</option>
+
+          <option value="city">Sort by City (A-Z)</option>
+
+          <option value="rate">Sort by Price (Low-High)</option>
+
+          <option value="region_nw">Sort by Region: Northwest</option>
+
+          <option value="region_ne">Sort by Region: Northeast</option>
+
+          <option value="region_central">Sort by Region: Central</option>
+
+          <option value="region_south">Sort by Region: South</option>
+
+        </select>
+      </div>
+
+      <div class="location-list">
+        <template x-for="loc in filteredLocations" :key="loc.id">
+          <div class="location-card" :class="{'selected': isSelected(loc.id)}">
+            <div class="loc-info">
+              <h4 x-text="loc.city + ' (' + loc.county + ')'"></h4>
+              <p class="loc-meta">
+<span x-text="loc.impressions ? formatImpressions(loc.impressions) + ' Annual Impressions' : 'Coming Soon'"></span>                <br>
+<span class="price-tag" x-text="loc.rate ? formatRate(loc.rate) + ' /mo' : 'Contact for Pricing'"></span>              </p>
+            </div>
+            <button
+              class="btn-add"
+              @click="toggleLocation(loc)"
+              x-text="isSelected(loc.id) ? 'Remove' : 'Add'"
+              :class="isSelected(loc.id) ? 'btn-danger' : 'btn-primary'">
+            </button>
+          </div>
+        </template>
+
+        <div x-show="filteredLocations.length === 0" class="no-results">
+          No locations found.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <!-- Below: Customize Package -->
+
+<section class="builder-stack">
+
+  <!-- Step 2 (stacked, centered) -->
+  <div class="builder-narrow">
+    <div class="builder-step-head">
+      <div class="step-kicker step-kicker-large">Step 2</div>
+      <h2><span class="heading-emphasis">Customize</span> Package</h2>
+      <p>Configure your ad type and campaign duration to match your advertising goals.</p>
+    </div>
+
+    <div class="builder-section-card">
+      <section class="builder-config">
+        <div class="config-panel">
+          <h2 class="config-section-heading">Campaign Duration</h2>
+
+          <!-- Duration -->
+          <div class="control-group">
+   <div class="duration-label-group" :class="{'pulse-duration': duration === 0}">
+             
+              <span class="duration-display" x-text="duration === 0 ? '0 months' : duration + ' ' + (duration === 1 ? 'month' : 'months')"></span>
+            </div>
+ <label class="duration-label-top" :class="{'pulse-duration': duration === 0}">Select Campaign Duration:</label>
+            <input type="range" min="0" max="12" x-model.number="duration" class="slider" :class="{'pulse-duration': duration === 0}">
+
+
+          <!-- Ad Placement Type (NEW) -->
+          <div class="control-group">
+            <h2 class="config-section-heading">Ad Placement Type</h2>
+            <div class="placement-cards">
+              
+              <!-- Standard 16:9 Placement -->
+              <div class="placement-card" 
+                   :class="{'selected': placementType === 'standard'}"
+                   @click="selectPlacement('standard')"
+                   role="button"
+                   tabindex="0"
+                   @keydown.enter.prevent="selectPlacement('standard')"
+                   @keydown.space.prevent="selectPlacement('standard')">
+                <div class="placement-card-content">
+<div class="placement-card-visual">
+                    <svg width="250" height="143" viewBox="0 0 250 143" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <!-- Main Display Area (16:9 - horizontal) -->
+                      <rect x="7" y="7" width="236" height="129" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="1" stroke-width="2.5"/>
+                      <!-- Label -->
+                   <text x="125" y="72" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="currentColor" text-anchor="middle" dominant-baseline="middle">16:9</text>
+                    </svg>
+                  </div>
+                  <div class="placement-card-text">
+                    <h3 class="placement-card-header">Standard 16:9</h3>
+                    <ul class="placement-card-specs">
+                      <li>Main Display Area</li>
+                      <li>1920×1080 pixels</li>
+                      <li>Static or Video</li>
+                      <li>10-30 second options</li>
+                    </ul>
+                  </div>
+                </div>
+                <button type="button" class="placement-card-cta">
+                  <span x-show="placementType !== 'standard'">Select</span>
+                  <span x-show="placementType === 'standard'">✓ Selected</span>
+                </button>
+              </div>
+
+              <!-- Premium Sidebar Placement -->
+              <div class="placement-card placement-card-premium" 
+                   :class="{'selected': placementType === 'premium'}"
+                   @click="selectPlacement('premium')"
+                   role="button"
+                   tabindex="0"
+                   @keydown.enter.prevent="selectPlacement('premium')"
+                   @keydown.space.prevent="selectPlacement('premium')">
+                <div class="placement-card-badge">Premium</div>
+                <div class="placement-card-content">
+<div class="placement-card-visual">
+                    <svg width="120" height="138" viewBox="0 0 120 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <!-- Premium Sidebar - VERTICAL -->
+<rect x="26" y="5" width="68" height="128" rx="4" fill="#ff6b35" fill-opacity="0.15" stroke="#ff6b35" stroke-opacity="1" stroke-width="2.5"/>                      <!-- Vertical label stacked -->
+                      <text x="60" y="30" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">P</text>
+                      <text x="60" y="45" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">R</text>
+                      <text x="60" y="60" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">E</text>
+                      <text x="60" y="75" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">M</text>
+                      <text x="60" y="90" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">I</text>
+                      <text x="60" y="105" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">U</text>
+                      <text x="60" y="120" font-family="Arial, sans-serif" font-size="9" font-weight="900" fill="#ff6b35" text-anchor="middle">M</text>
+                    </svg>
+                  </div>
+                  <div class="placement-card-text">
+                    <h3 class="placement-card-header">Premium Sidebar</h3>
+                    <ul class="placement-card-specs">
+                      <li>Right Premium Area</li>
+                      <li>440×835 pixels (Portrait)</li>
+                      <li>Static Image Only</li>
+                      <li>60 second display</li>
+                    </ul>
+                  </div>
+                </div>
+                <button type="button" class="placement-card-cta">
+                  <span x-show="placementType !== 'premium'">Select</span>
+                  <span x-show="placementType === 'premium'">✓ Selected</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Ad Type (Standard Placement Only) -->
+          <div class="control-group" x-show="placementType === 'standard'">
+            <label style="position: relative;">
+              Ad Type
+              <button class="info-tooltip-trigger" @click.prevent="$refs.adTypeTooltip.classList.toggle('visible')" aria-label="Static vs Video explanation">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1"/>
+                  <path d="M7 6V10M7 4.5V4.51" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <div class="info-tooltip" x-ref="adTypeTooltip">
+                <div class="info-tooltip-content">
+                  <strong>Static Image:</strong> Choose 10-30 seconds, supports creative services add-on<br><br>
+                  <strong>Video:</strong> (15 or 30 seconds), requires pre-produced content
+                </div>
+              </div>
+            </label>
+            <div class="toggle-group">
+              <button :class="{'active': adType === 'static'}" @click="adType='static'; ensureValidAdLength()">Static Image</button>
+              <button :class="{'active': adType === 'video'}" @click="adType='video'; ensureValidAdLength()">Soundless Video</button>
+            </div>
+          </div>
+
+          <!-- On-Screen Duration (Standard Placement Only) -->
+          <div class="control-group" x-show="placementType === 'standard'">
+            <h3>On-Screen Duration</h3>
+
+            <!-- Static Image: show all 4 -->
+            <template x-if="adType === 'static'">
+              <div class="duration-row">
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="10">
+                  <span>10s</span>
+                </label>
+
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="15">
+                  <span>15s</span>
+                </label>
+
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="20">
+                  <span>20s</span>
+                </label>
+
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="30">
+                  <span>30s</span>
+                </label>
+              </div>
+            </template>
+
+            <!-- Video: only 15 and 30 -->
+            <template x-if="adType === 'video'">
+              <div class="duration-row">
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="15">
+                  <span>15s</span>
+                </label>
+
+                <label class="radio-pill">
+                  <input type="radio" x-model.number="adLength" :value="30">
+                  <span>30s</span>
+                </label>
+              </div>
+            </template>
+          </div>
+
+          <!-- Premium Placement Info -->
+          <div class="control-group" x-show="placementType === 'premium'">
+            <div class="premium-info-box">
+              <h3>60-Second Premium Display</h3>
+              <p>Static image only • 440×835 pixels (portrait format) required</p>
+              <ul class="premium-benefits">
+                <li>✓ Extended 60-second display time</li>
+                <li>✓ Exclusive sidebar placement</li>
+                <li>✓ Premium pricing (2x base rate)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Creative Services -->
+          <div class="control-group checkbox-group">
+            <label>
+              <input type="checkbox" x-model="creativeService" :disabled="adType === 'video'">
+Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="note-inline">(Static images only)</span>            </label>
+          </div>
+
+          <div class="content-later-note">
+            <strong>Ad Content Submission</strong>
+            <p>
+              No need to upload ad files right now.
+              After submitting your package, we’ll email you instructions and a secure link to provide your ad content.
+            </p>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Step 3 (stacked, centered) -->
+  <div class="builder-narrow">
+    <div class="builder-step-head">
+      <div class="step-kicker">Step 3</div>
+      <h2>Review Estimate</h2>
+      <p>Review your total cost before proceeding. Final pricing is confirmed at checkout.</p>
+    </div>
+
+    <div class="builder-section-card">
+      <section class="builder-estimator">
+
+        <div class="summary-box" :class="{'estimator-collapsed': !estimatorExpanded}">
+          <div class="estimator-head">
+            <h3>Estimated Total</h3>
+
+            <!-- Mobile-only collapse toggle -->
+            <button type="button"
+                    class="estimator-toggle"
+                    @click="estimatorExpanded = !estimatorExpanded">
+              <span x-text="estimatorExpanded ? 'Hide details' : 'Show details'"></span>
+            </button>
+          </div>
+
+          <!-- Details -->
+          <div class="estimator-body" x-show="estimatorExpanded" x-collapse>
+            <div class="summary-row">
+              <span>Locations:</span>
+              <span x-text="selectedLocations.length"></span>
+            </div>
+
+            <div class="summary-row">
+              <span>Campaign Duration:</span>
+              <span x-text="duration + ' ' + (duration === 1 ? 'month' : 'months')"></span>
+            </div>
+
+            <div class="summary-row">
+              <span>Subtotal:</span>
+              <span x-text="formatCurrency(monthlySubtotal * duration)"></span>
+            </div>
+
+            <!-- Discounts (collapsible) -->
+            <div class="summary-row discount discount-toggle"
+                 x-show="totalDiscountAmount > 0"
+                 @click="discountsOpen = !discountsOpen"
+                 role="button"
+                 tabindex="0"
+                 @keydown.enter.prevent="discountsOpen = !discountsOpen"
+                 @keydown.space.prevent="discountsOpen = !discountsOpen">
+
+              <span class="discounts-label">
+                <span class="caret" :class="{'open': discountsOpen}">▸</span>
+                Discounts:
+              </span>
+
+              <span x-text="'-' + formatCurrency(totalDiscountAmount)"></span>
+            </div>
+
+            <!-- Sub discounts -->
+<div class="discount-details" x-show="discountsOpen">
+              <div class="summary-row sub-discount" x-show="locationDiscountAmount > 0">
+                <span x-text="'Location Discount: ' + Math.round(locationDiscountPercent * 100) + '%'"></span>
+                <span x-text="'-' + formatCurrency(locationDiscountAmount)"></span>
+              </div>
+
+              <div class="summary-row sub-discount" x-show="durationDiscountAmount > 0">
+                <span x-text="'Duration Discount: ' + Math.round(durationDiscountPercent * 100) + '%'"></span>
+                <span x-text="'-' + formatCurrency(durationDiscountAmount)"></span>
+              </div>
+            </div>
+
+            <div class="summary-row" x-show="creativeService">
+              <span>One-time Creative Fee:</span>
+              <span>$200.00</span>
+            </div>
+
+            <p class="note" x-show="hasContactPricing">*Includes locations requiring custom pricing.</p>
+
+            <p class="note">
+              Ad content collected later via email.
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div class="estimator-footer">
+            <div class="total-row total-row-sticky">
+              <span>Campaign Total:</span>
+              <span x-text="formatCurrency(grandTotal)"></span>
+            </div>
+
+            <div class="estimator-actions">
+              <button class="start-over-btn" type="button" @click="resetBuilder()">
+                Start Over
+              </button>
+
+              <button class="btn btn-success" @click="proceedToContract" :disabled="selectedLocations.length === 0">
+                Proceed
+              </button>
+            </div>
+
+            <p class="error-msg" x-show="selectedLocations.length === 0">Please select at least one location to continue.</p>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+</section>
+
+
+
+<div class="desktop-action-bar" x-show="showDesktopActionBar" x-cloak>
+  <div class="desktop-action-inner">
+    <div class="desktop-action-total">
+      <span>Campaign Total:</span>
+      <strong x-text="formatCurrency(grandTotal)"></strong>
+    </div>
+
+    <div class="desktop-action-buttons">
+      <button class="start-over-btn" type="button" @click="resetBuilder()">Start Over</button>
+
+      <button class="btn btn-success"
+              type="button"
+              @click="proceedToContract"
+              :disabled="selectedLocations.length === 0">
+        Proceed
+      </button>
+
+      
+    </div>
+  </div>
+</div>
+
+<div class="mobile-action-bar" x-show="showMobileActionBar" x-cloak>
+  <div class="mobile-action-inner">
+    <div class="mobile-action-total">
+      <span>Campaign Total:</span>
+      <strong x-text="formatCurrency(grandTotal)"></strong>
+    </div>
+
+    <div class="mobile-action-buttons">
+      <button class="start-over-btn" type="button" @click="resetBuilder()">Start Over</button>
+      <button class="btn btn-success"
+        type="button"
+        @click="proceedToContract"
+        :disabled="selectedLocations.length === 0">
+  Proceed
+</button>
+<p class="note">Next step: enter business & contact details.</p>
+
+    </div>
+  </div>
+</div>
+
+
+  </div>     
+
+        <!-- Step 2: Contract & Info Form -->
+        <div class="form-layout container" x-show="step === 2" x-cloak>
+            <h2>Finalize Your Campaign</h2>
+            <form @submit.prevent="submitContract">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Business Name</label>
+                        <input type="text" x-model="form.businessName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Name</label>
+                        <input type="text" x-model="form.contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" x-model="form.email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" x-model="form.phone" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Address</label>
+                        <input type="text" x-model="form.address" required>
+                    </div>
+                </div>
+
+                <div class="contract-preview">
+                    <h3>Contract Summary</h3>
+                    <p><strong>Provider:</strong> Nextgen Advertising, LLC</p>
+                    <p><strong>Client:</strong> <span x-text="form.businessName || '[Business Name]'"></span></p>
+                    <p><strong>Total:</strong> <span x-text="formatCurrency(grandTotal)"></span></p>
+                    <p><strong>Terms:</strong> <span x-text="duration"></span> Month(s), <span x-text="selectedLocations.length"></span> Location(s).</p>
+                    <p class="small-legal">By clicking Submit, you agree to the <a href="terms.html" target="_blank">Terms of Use</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" @click="step = 1">Back</button>
+                    <button type="submit" class="btn btn-primary">Sign & Generate Invoice</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div class="success-layout container" x-show="step === 3" x-cloak>
+            <div class="success-card">
+                <div class="check-icon">✓</div>
+                <h2>Package Submitted!</h2>
+                <p>A contract and invoice have been sent to <strong x-text="form.email"></strong>.</p>
+                <p>Once payment is received via the invoice link (Stripe) and content is approved, your campaign will go live.</p>
+                <a href="index.html" class="btn btn-primary">Return Home</a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Nextgen Advertising, LLC. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Use</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
