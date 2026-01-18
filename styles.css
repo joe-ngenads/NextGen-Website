@@ -802,13 +802,16 @@ body {
    Step 2 Enhancements (Desktop Only)
    ========================================================= */
 
-/* Larger Step 2 badge on desktop */
+/* Larger Step badges on desktop */
 @media (min-width: 769px) {
+  .builder-step-head .step-kicker,
   .step-kicker-large {
-    font-size: 14px;
-    padding: 8px 20px;
+    font-size: 20px;
+    padding: 20px 48px;  /* Increased left/right padding */
     letter-spacing: 1px;
   }
+}
+}
 }
 
 /* Emphasized "Customize" in heading */
