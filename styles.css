@@ -642,10 +642,29 @@ body {
   margin-bottom: 24px;
 }
 
-.control-group:last-child{
-  margin-bottom: 0;
+/* Ad Type tooltip: position relative to icon, not full-width label */
+.control-group > label .info-tooltip {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
 }
 
+/* Desktop: shift Ad Type tooltip to the right */
+@media (min-width: 769px) {
+  .control-group > label .info-tooltip {
+    left: 50%;
+    transform: translateX(40%);
+  }
+}
+
+/* Mobile: shift Ad Type tooltip to center of card */
+@media (max-width: 768px) {
+  .control-group > label .info-tooltip {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 80px;
+  }
+}
 .control-group > label,
 .control-group > h3{
   display: block;
@@ -655,6 +674,15 @@ body {
   margin-bottom: 0px;
 }
 
+/* Force Ad Type label to inline width, not full container width */
+.control-group > label {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  max-width: fit-content;
+}
 .control-group > label > span{
   font-weight: 900;
   color: var(--ng-blue-700);
@@ -2245,6 +2273,13 @@ Select Campaign Duration:
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.2s, visibility 0.2s;
+}
+
+/* Impressions tooltip: position at end of text */
+.estimator-card .info-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
 }
 
 .info-tooltip.visible {
