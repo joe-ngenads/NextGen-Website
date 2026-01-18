@@ -121,6 +121,10 @@ body {
   background-color: var(--accent-green); 
   color: #fff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 18px;
+  padding: 14px 32px;
+  font-weight: 700;
+  min-height: 50px;
 }
 
 .btn-success:hover {
@@ -678,7 +682,7 @@ body {
 .control-group > label {
   display: inline-flex !important;
   flex-direction: row !important;
-  align-items: center;
+  align-items: left;
   gap: 6px;
   width: auto !important;
   max-width: fit-content;
@@ -787,7 +791,7 @@ body {
 
 .checkbox-group label{
   display: inline-flex;
-  align-items: center;
+  align-items: left;
   gap: 10px;
   cursor: pointer;
   font-weight: 700;
@@ -1160,6 +1164,9 @@ Select Campaign Duration:
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .content-later-note{
@@ -1836,9 +1843,14 @@ Select Campaign Duration:
     height: 46px;
   }
 
-  .desktop-action-buttons .btn-success{
-    height: 46px;
-  }
+.desktop-action-buttons .btn-success{
+  height: 56px;
+  font-size: 18px;
+  padding: 0 32px;
+  font-weight: 700;
+}
+
+
 
   .desktop-action-note{
     grid-column: 1 / -1;
@@ -2161,8 +2173,8 @@ Select Campaign Duration:
   .control-group > label {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: left;
+    text-align: left;
   }
 
   .control-group > label > span {
@@ -2172,6 +2184,15 @@ Select Campaign Duration:
     color: var(--ng-blue-700);
     margin-top: 8px;
   }
+/* Mobile: bigger Proceed button */
+@media (max-width: 768px) {
+  .estimator-footer .btn-success {
+    height: 50px;
+    font-size: 15px;
+    padding: 0 40px;
+    font-weight: 700;
+  }
+}
 
   /* Mobile: Move "(Static images only)" below the checkbox label */
  
@@ -2188,8 +2209,9 @@ Select Campaign Duration:
   grid-column: 1 / -1;
   font-size: 12px !important;
   line-height: 1.3;
-  margin: 40px 0 0 25px;
-  text-align: center;
+  margin: 70px 0 0 25px;
+  text-align: left;
+align-self: center;
 }
 .checkbox-group label {
   display: grid;
@@ -2198,7 +2220,7 @@ Select Campaign Duration:
   gap: 6px 8px;
   font-size: 14px;
   font-weight: 600;
-  align-items: center;
+  align-items: left;
   position: relative;
   padding-bottom: 20px;
 }
