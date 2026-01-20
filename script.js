@@ -1,8 +1,115 @@
+// =========================================================
+// PHASE 2: HEADER SCROLL EFFECT & SMOOTH SCROLL
+// =========================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.site-header');
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  // Add shadow to header on scroll
+  function updateHeaderOnScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  
+// Update active nav link based on scroll position
+function updateActiveNavLink() {
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const scrollPosition = window.scrollY;
+  
+  // Account for header height (sticky header is ~60px)
+  const headerOffset = 80;
+  
+  // Find which section we're currently in
+  let currentSection = '';
+  
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - headerOffset;
+    const sectionBottom = sectionTop + section.offsetHeight;
+    
+    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+      currentSection = section.getAttribute('id');
+    }
+  });
+  
+  // Special case: if at very top of page, highlight "hero"
+  if (scrollPosition < 100) {
+    currentSection = 'hero';
+  }
+  
+  // Update nav links
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${currentSection}`) {
+      link.classList.add('active');
+    }
+  });
+}
+  
+  // Run on scroll
+  window.addEventListener('scroll', () => {
+    updateHeaderOnScroll();
+    updateActiveNavLink();
+  }, { passive: true });
+  
+  // Run once on load
+  updateHeaderOnScroll();
+  updateActiveNavLink();
+});
+
+// =========================================================
+// SMOOTH SCROLL & PREVENT NEW TAB FOR HASH LINKS
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle all internal hash links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      
+      // Skip empty hashes
+      if (href === '#' || href === '') {
+        e.preventDefault();
+        return;
+      }
+      
+      // Get target element
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // Prevent default behavior
+        e.preventDefault();
+        
+        // Smooth scroll to target
+        targetElement.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+        // Update URL without jumping
+        history.pushState(null, null, href);
+      } else {
+        // Target doesn't exist yet - just prevent default to avoid new tab
+        e.preventDefault();
+        console.log(`Section ${href} doesn't exist yet - will be added in future phases`);
+      }
+    });
+  });
+});
+
+// =========================================================
+// EXISTING CODE BELOW (Shared Navigation Logic, etc.)
+// =========================================================
+
 // Shared Navigation Logic
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const closeMenu = document.querySelector('.close-menu');
     const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
     if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
@@ -11,6 +118,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         closeMenu.addEventListener('click', () => {
             mobileMenu.classList.remove('open');
+        });
+        
+        // Close mobile menu when clicking any nav link
+        // Wait for menu to close before scrolling
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Close the menu first
+                mobileMenu.classList.remove('open');
+                
+                // Don't let the hash link default behavior happen yet
+                e.preventDefault();
+                
+                // Wait for menu close animation (300ms), then scroll
+                setTimeout(() => {
+                    const href = link.getAttribute('href');
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        history.pushState(null, null, href);
+                    }
+                }, 350); // Wait 350ms for menu to fully close (300ms transition + 50ms buffer)
+            });
         });
     }
 });
@@ -542,3 +676,82 @@ function parseCSV(csvText) {
         };
     });
 }
+
+// =========================================================
+// TESTIMONIALS CAROUSEL
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const track = document.getElementById('testimonialTrack');
+  const dotsContainer = document.getElementById('testimonialDots');
+  
+  if (!track || !dotsContainer) return; // Exit if elements don't exist
+  
+  const slides = track.querySelectorAll('.testimonial-slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let autoPlayInterval = null; // Store interval ID
+  
+  console.log('Testimonial carousel initialized:', totalSlides, 'slides found'); // Debug
+  
+  // Create dots
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.classList.add('testimonial-dot');
+    dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => {
+      goToSlide(i);
+      resetAutoPlay(); // Reset timer on manual click
+    });
+    dotsContainer.appendChild(dot);
+  }
+  
+  const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+  
+function updateCarousel() {
+    // Use percentage-based transform (most reliable across all screen sizes)
+    const offset = currentSlide * 100;
+    
+    track.style.transform = `translateX(-${offset}%)`;
+    
+    console.log('Slide to:', currentSlide, 'Offset:', offset + '%'); // Debug
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentSlide);
+    });
+  }
+  
+  function goToSlide(index) {
+    currentSlide = index;
+    updateCarousel();
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+  }
+  
+  function startAutoPlay() {
+    // Clear any existing interval first
+    if (autoPlayInterval) {
+      clearInterval(autoPlayInterval);
+    }
+    // Start new interval
+    autoPlayInterval = setInterval(nextSlide, 7000);
+  }
+  
+  function resetAutoPlay() {
+    console.log('Auto-play timer reset'); // Debug
+    startAutoPlay(); // Restart the timer
+  }
+  
+  // Initial render
+  updateCarousel();
+  
+  // Start auto-play
+  startAutoPlay();
+  
+  // Recalculate on window resize
+  window.addEventListener('resize', updateCarousel);
+});
