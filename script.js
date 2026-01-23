@@ -279,10 +279,12 @@ this.showDesktopActionBar = (top <= desktopTriggerPx) && !this.suppressDesktopAc
             });
         },
 
-        ensureValidAdLength() {
+ensureValidAdLength() {
     if (this.adType === 'video') {
         // Video: only 15 or 30
         if (![15, 30].includes(Number(this.adLength))) this.adLength = 15;
+        // Creative service not available for video - reset if enabled
+        this.creativeService = false;
     } else {
         // Static: default to 10s when switching back
         this.adLength = 10;
@@ -515,8 +517,40 @@ toggleLocation(loc) {
             }
         },
 
-        isSelected(id) {
+isSelected(id) {
             return this.selectedLocations.some(l => l.id === id);
+        },
+
+        // Check if all locations are selected
+        get allLocationsSelected() {
+            return this.locations.length > 0 && this.selectedLocations.length === this.locations.length;
+        },
+
+        // Toggle all locations at once
+        toggleAllLocations() {
+            if (this.allLocationsSelected) {
+                // Remove all locations
+                this.selectedLocations = [];
+                // Reset all pins to blue
+                if (this.markers && this.blueIcon) {
+                    Object.values(this.markers).forEach(marker => {
+                        if (marker && typeof marker.setIcon === 'function') {
+                            marker.setIcon(this.blueIcon);
+                        }
+                    });
+                }
+            } else {
+                // Add all locations
+                this.selectedLocations = [...this.locations];
+                // Set all pins to red
+                if (this.markers && this.redIcon) {
+                    Object.values(this.markers).forEach(marker => {
+                        if (marker && typeof marker.setIcon === 'function') {
+                            marker.setIcon(this.redIcon);
+                        }
+                    });
+                }
+            }
         },
 
         handleFileUpload(e) {
