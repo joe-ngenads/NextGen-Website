@@ -116,7 +116,13 @@ body {
 
 .btn-block { display: block; width: 100%; }
 
-.btn-primary { background-color: var(--primary-blue); color: #fff; }
+.btn-primary { 
+  background-color: var(--primary-blue); 
+  color: #fff; 
+  padding: 14px 28px; 
+  font-size: 17px; 
+  font-weight: 600;
+}
 .btn-success { 
   background-color: var(--accent-green); 
   color: #fff;
@@ -148,7 +154,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 6px 0;
+  padding: 18px 0;          /* Makes the whole header much taller */
+  border-bottom: 6px solid #0b74ff;   /* Bold blue accent line (matches your current blue theme) */
 }
 
 .header-inner {
@@ -163,7 +170,7 @@ body {
   line-height: 0;
 }
 
-.logo { height: 42px; width: auto; display: block; }
+.logo { height: 62px; width: auto; display: block; }   /* Bigger logo to fill the taller header */
 
 .nav-list { list-style: none; display: flex; gap: 20px; }
 
@@ -171,6 +178,7 @@ body {
   text-decoration: none;
   color: var(--text-color);
   font-weight: 500;
+  font-size: 16.5px;   /* Slightly larger and more readable */
 }
 
 .nav-list a.active { color: var(--primary-blue); }
