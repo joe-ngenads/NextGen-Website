@@ -15,40 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-// Update active nav link based on scroll position
 function updateActiveNavLink() {
-  const sections = document.querySelectorAll('section[id], div[id]');
-  const scrollPosition = window.scrollY;
-  
-  // Account for header height (sticky header is ~60px)
-  const headerOffset = 80;
-  
-  // Find which section we're currently in
+  const header = document.querySelector('.site-header');
+  const headerHeight = header ? header.getBoundingClientRect().height + 50 : 120;
+  const scrollPosition = window.scrollY + headerHeight + 30;
+
   let currentSection = '';
-  
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - headerOffset;
-    const sectionBottom = sectionTop + section.offsetHeight;
-    
-    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-      currentSection = section.getAttribute('id');
+  document.querySelectorAll('section[id], #builder, #faq').forEach(section => {
+    const top = section.offsetTop;
+    if (scrollPosition >= top && scrollPosition <= top + section.offsetHeight) {
+      currentSection = section.getAttribute('id') || 'builder';
     }
   });
-  
-  // Special case: if at very top of page, highlight "hero"
-  if (scrollPosition < 100) {
-    currentSection = 'hero';
-  }
-  
-  // Update nav links
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === `#${currentSection}`) {
-      link.classList.add('active');
-    }
+
+  if (window.scrollY < 200) currentSection = 'hero';
+
+  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === `#${currentSection}`);
   });
-}
-  
+}  
   // Run on scroll
   window.addEventListener('scroll', () => {
     updateHeaderOnScroll();
@@ -61,40 +46,39 @@ function updateActiveNavLink() {
 });
 
 // =========================================================
-// SMOOTH SCROLL & PREVENT NEW TAB FOR HASH LINKS
+// SMOOTH SCROLL WITH DYNAMIC HEADER OFFSET (Fixed for taller header)
 // =========================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Handle all internal hash links
+  const header = document.querySelector('.site-header');
+  
+  // Handle ALL internal hash links (desktop nav + mobile menu)
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
       
-      // Skip empty hashes
       if (href === '#' || href === '') {
         e.preventDefault();
         return;
       }
       
-      // Get target element
       const targetId = href.substring(1);
       const targetElement = document.getElementById(targetId);
       
       if (targetElement) {
-        // Prevent default behavior
         e.preventDefault();
         
-        // Smooth scroll to target
-        targetElement.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
+        // Dynamic offset using the ACTUAL header height + 24px breathing room
+        const headerHeight = header.getBoundingClientRect().height + 24;
+        
+        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
         });
         
-        // Update URL without jumping
         history.pushState(null, null, href);
-      } else {
-        // Target doesn't exist yet - just prevent default to avoid new tab
-        e.preventDefault();
-        console.log(`Section ${href} doesn't exist yet - will be added in future phases`);
       }
     });
   });
@@ -165,7 +149,8 @@ function packageBuilder() {
         creativeService: false,
         files: [],
         step: 1,
-
+        showFormModal: false,
+        showSuccessModal: false,
         // Mobile sticky bar (existing)
         showMobileActionBar: false,
         suppressMobileActionBar: false,
@@ -176,13 +161,17 @@ function packageBuilder() {
 
         map: null,
         markers: {},
-        form: {
-            businessName: '',
-            contactName: '',
-            email: '',
-            phone: '',
-            address: '',
-        },
+form: {
+    businessName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    street: '',
+    city: '',
+    state: 'OH',
+    zip: '',
+},
 
         resetBuilder() {
             this.selectedLocations = [];
@@ -223,6 +212,9 @@ function packageBuilder() {
 
             // Ensure default adLength matches default adType
             this.ensureValidAdLength();
+
+	    // Initialize EmailJS with your account
+            emailjs.init("Wdg9jyuQz5dToVWKv");
 
             // Initialize Map
             this.$nextTick(() => {
@@ -279,17 +271,14 @@ this.showDesktopActionBar = (top <= desktopTriggerPx) && !this.suppressDesktopAc
             });
         },
 
-ensureValidAdLength() {
-    if (this.adType === 'video') {
-        // Video: only 15 or 30
-        if (![15, 30].includes(Number(this.adLength))) this.adLength = 15;
-        // Creative service not available for video - reset if enabled
-        this.creativeService = false;
-    } else {
-        // Static: default to 10s when switching back
-        this.adLength = 10;
-    }
-},
+        ensureValidAdLength() {
+            if (this.adType === 'video') {
+                if (![15, 30].includes(Number(this.adLength))) this.adLength = 15;
+                this.creativeService = false;
+            } else {
+                if (this.adLength === 60) this.adLength = 10;
+            }
+        },
 
         selectPlacement(type) {
             this.placementType = type;
@@ -557,35 +546,50 @@ isSelected(id) {
             this.files = Array.from(e.target.files);
         },
 
-        // Pricing Logic
-        get monthlySubtotal() {
-            const base = this.selectedLocations.reduce((sum, loc) => sum + (loc.rate || 0), 0);
-
+        // === NEW PROMO PRICING ENGINE (First 3 Months @ $50 cap) ===
+        get lengthMultiplier() {
             const sec = Number(this.adLength);
-
-            // On-Screen Duration multiplier
-            // Standard Static: 10s = 1x, 15s = 1.5x, 20s = 2x, 30s = 3x
-            // Standard Video: 15s = 1.5x, 30s = 2x
-            // Premium (60s): 2x (same as Standard 20s)
             let lengthMult = 1;
 
             if (this.placementType === 'premium') {
-                // Premium placement: 60s uses 2x multiplier
                 lengthMult = 2;
-            } else if (this.adType === 'video') {
-                // Standard video pricing
+            } 
+            else if (this.adType === 'video') {
+                // FIXED: Video 30s now correctly gets 3x (same as Static 30s)
                 if (sec === 15) lengthMult = 1.5;
-                else if (sec === 30) lengthMult = 2;
-                else lengthMult = 1.5; // defensive default for video
-            } else {
-                // Standard static pricing
+                else if (sec === 30) lengthMult = 3;
+                else lengthMult = 1.5;
+            } 
+            else {
+                // Static image pricing (unchanged)
                 if (sec === 10) lengthMult = 1;
                 else if (sec === 15) lengthMult = 1.5;
                 else if (sec === 20) lengthMult = 2;
                 else if (sec === 30) lengthMult = 3;
             }
+            return lengthMult;
+        },
 
-            return base * lengthMult;
+        get monthlySubtotal() {  // FULL original rate (used for promo calculation)
+            const base = this.selectedLocations.reduce((sum, loc) => sum + (loc.rate || 0), 0);
+            return base * this.lengthMultiplier;
+        },
+
+        get promoMonthlySubtotal() {
+            const promoBase = this.selectedLocations.reduce((sum, loc) => sum + Math.min(loc.rate || 0, 50), 0);
+            return promoBase * this.lengthMultiplier;
+        },
+
+        get promoSavings() {
+            if (!this.duration) return 0;
+            const monthsPromo = Math.min(this.duration, 3);
+            return (this.monthlySubtotal - this.promoMonthlySubtotal) * monthsPromo;
+        },
+
+        get totalBeforeDiscounts() {
+            if (!this.duration) return 0;
+            const monthsPromo = Math.min(this.duration, 3);
+            return this.promoMonthlySubtotal * monthsPromo + this.monthlySubtotal * (this.duration - monthsPromo);
         },
 
         get durationDiscountPercent() {
@@ -602,42 +606,34 @@ isSelected(id) {
         get locationDiscountPercent() {
             const count = this.selectedLocations.length;
 
-            // 1: 0%
-            // 2–49: 10%
-            // 50–99: 20%
-            // 100+: 25%
+            // NEW BRACKETS:
+            // 1–9:    0%
+            // 10–24:  10%
+            // 25–49:  15%
+            // 50–99:  20%
+            // 100+:   25%
             if (count >= 100) return 0.25;
-            if (count >= 50) return 0.20;
-            if (count >= 2) return 0.10;
+            if (count >= 50)  return 0.20;
+            if (count >= 25)  return 0.15;
+            if (count >= 10)  return 0.10;
             return 0;
         },
 
         get locationDiscountAmount() {
-            const sub = this.monthlySubtotal * this.duration;
-            const afterLoc = sub * (1 - this.locationDiscountPercent);
-            return sub - afterLoc;
+            return this.totalBeforeDiscounts * this.locationDiscountPercent;
         },
 
         get durationDiscountAmount() {
-            const sub = this.monthlySubtotal * this.duration;
-            const afterLoc = sub * (1 - this.locationDiscountPercent);
-            const afterDur = afterLoc * (1 - this.durationDiscountPercent);
-            return afterLoc - afterDur;
+            const afterLoc = this.totalBeforeDiscounts * (1 - this.locationDiscountPercent);
+            return afterLoc * this.durationDiscountPercent;
         },
 
         get totalDiscountAmount() {
             return this.locationDiscountAmount + this.durationDiscountAmount;
         },
 
-        // Backwards-compatible aggregate discount used by existing UI logic
-        get discountAmount() {
-            return this.totalDiscountAmount;
-        },
-
         get grandTotal() {
-            const sub = this.monthlySubtotal * this.duration;
-            const creative = this.creativeService ? 200 : 0;
-            return (sub - this.discountAmount) + creative;
+            return this.totalBeforeDiscounts - this.totalDiscountAmount + (this.creativeService ? 200 : 0);
         },
 
         get hasContactPricing() {
@@ -645,24 +641,74 @@ isSelected(id) {
         },
 
         proceedToContract() {
-            if (this.selectedLocations.length === 0) return;
-            this.step = 2;
-            window.scrollTo(0, 0);
+            if (this.selectedLocations.length === 0) {
+                alert("Please select at least one location first.");
+                return;
+            }
+            this.showFormModal = true;   // opens the form on top of the builder
         },
 
-        submitContract() {
-            // Placeholder for API call to generate contract/invoice
-            console.log("Generating Contract for:", this.form);
-            console.log("Package:", this.selectedLocations, this.grandTotal);
+submitFormModal() {
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
 
-            // Simulate loading
-            setTimeout(() => {
-                this.step = 3;
-                window.scrollTo(0, 0);
-            }, 1000);
+    let locationsHTML = '';
+    this.selectedLocations.forEach(loc => {
+        locationsHTML += `<tr><td>${loc.city} (${loc.county})</td><td>${this.formatImpressions(loc.impressions)}</td><td>${this.formatRate(loc.rate)}</td></tr>`;
+    });
+
+    const fullName = `${this.form.firstName} ${this.form.lastName}`.trim();
+
+    const params = {
+        businessName: this.form.businessName,
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
+        fullName: fullName,
+        email: this.form.email,
+        phone: this.form.phone,
+        street: this.form.street,
+        city: this.form.city,
+        state: this.form.state,
+        zip: this.form.zip,
+        duration: this.duration,
+        placementType: this.placementType === 'premium' ? 'Premium Sidebar (60s)' : 'Standard 16:9',
+        adType: this.adType === 'video' ? 'Soundless Video' : 'Static Image',
+        adLength: this.adLength,
+        creativeService: this.creativeService ? 'Yes ($200 added)' : 'No',
+        locationCount: this.selectedLocations.length,
+        locationsTable: locationsHTML,
+        monthlySubtotal: this.formatCurrency(this.monthlySubtotal),
+        totalBeforeDiscount: this.formatCurrency(this.monthlySubtotal * this.duration),
+        totalDiscount: this.formatCurrency(this.totalDiscountAmount),
+        grandTotal: this.formatCurrency(this.grandTotal),
+        date: new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+    };
+
+    Promise.all([
+        emailjs.send('service_pvgt3ya', 'template_uzwhgvi', { ...params, to_email: 'info@ngenads.com' }),
+        emailjs.send('service_pvgt3ya', 'template_p8oszan', { ...params, to_email: this.form.email })
+    ])
+    .then(() => {
+        this.resetBuilder();
+        this.form = { businessName: '', firstName: '', lastName: '', email: '', phone: '', street: '', city: '', state: 'OH', zip: '' };
+        this.showFormModal = false;
+        this.showSuccessModal = true;
+    })
+    .catch((error) => {
+        console.error("EmailJS error:", error);
+        alert("There was an issue sending the confirmation. Please try again or email us at info@ngenads.com");
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+},
+        // New helper to close the success modal
+        closeSuccessModal() {
+            this.showSuccessModal = false;
         },
 
-        // Formatters
+               // Formatters
         formatCurrency(val) {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
         },
@@ -671,7 +717,19 @@ isSelected(id) {
         },
         formatRate(val) {
             return val ? '$' + val.toFixed(2) : 'Contact for Pricing';
-        }
+        },
+        formatPhone(e) {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length > 10) val = val.substring(0, 10);
+           
+            if (val.length >= 7) {
+                e.target.value = `(${val.substring(0,3)}) ${val.substring(3,6)}-${val.substring(6)}`;
+            } else if (val.length >= 4) {
+                e.target.value = `(${val.substring(0,3)}) ${val.substring(3)}`;
+            } else if (val.length > 0) {
+                e.target.value = `(${val}`;
+            }
+        },
     }
 }
 

@@ -133,23 +133,23 @@ const rawCsvData = `Identifier,Region,County,City,Annual Impressions,Monthly Rat
 28,2,Franklin,Westerville,504327,$336.22 ,"562 W Schrock Rd, Westerville, Ohio, 43081",40.111455,-82.945686
 29,2,Franklin,Columbus (Alum Creek),713207,$400.00 ,"1583 Alum Creek Dr, Columbus, Ohio, 43209",39.937649,-82.943133
 33,2,Franklin,Columbus (Morse Rd),1080099,$400.00 ,"990 Morse Rd Suite A, Columbus, Ohio, 43229",40.062425,-82.992441
-11,2,Coshocton,Coshocton,,,"275 Downtowner Plaza, Coshocton, Ohio, 43812",40.269562,-81.869212
-13,1,Cuyahoga,North Royalton,,,"12771 State Rd, North Royalton, Ohio, 44133",41.3211,-81.723463
-21,1,Cuyahoga,Parma Hts,, ,"6339 Olde York Rd Ste 1, Parma Hts, Ohio, 44130",41.391474,-81.759292
-35,2,Franklin,Gahanna,,,"415 Agler Rd, Gahanna, Ohio, 43230",40.019025,-82.892511
-59,1,Holmes,Millersburg,,,"75 E Clinton St Ste 103, Millersburg, Ohio, 44654",40.555369,-81.916372
-61,2,Jefferson,Steubenville,,,"4244 Sunset Blvd Suite D, Steubenville, Ohio, 43952",40.373835,-80.678847
-63,1,Lake,Wickliffe,,,"30170 Euclid Ave, Wickliffe, Ohio, 44092",41.615451,-81.459645
-64,1,Lake,Willowick,,,"31517 Vine St, Willowick, Ohio, 44095",41.642736,-81.466244
-68,2,Licking,Pataskala,,,"318 Township Rd, Pataskala, Ohio, 43062",39.996724,-82.672662
-75,4,Lucas,Oregon,,,"3018 Navarre Ave, Oregon, Ohio, 43616",41.635415,-83.474866
-78,4,Lucas,Sylvania,,,"4900 N Mccord Rd Suite F1, Sylvania, Ohio, 43560",41.704629,-83.703273
-100,2,Perry,New Lexington,,,"600 W Broadway St, New Lexington, Ohio, 43764",39.721024,-82.221532
-111,4,Seneca,Tiffin,,,"457 E Market St, Tiffin, Ohio, 44883",41.118595,-83.166283
-119,1,Summit,Akron (Wolf Ledges),,,"688 Wolf Ledges Pkwy, Akron, Ohio, 44311",41.065031,-81.521113
-120,1,Summit,Barberton,,,"17 5th ST SE, Barberton, Ohio, 44203",41.009826,-81.587719
-124,1,Trumbull,Warren (Mahoning),,,"2750 Mahoning Ave NW, Ste 9, Warren, Ohio, 44483",41.260396,-80.833382
-126,1,Tuscarawas,New Philadelphia,,,"1260 Monroe St NW Ste 11F, New Philadelphia, Ohio, 44663",40.506449,-81.457613`;
+11,2,Coshocton,Coshocton,,$50.00 ,"275 Downtowner Plaza, Coshocton, Ohio, 43812",40.269562,-81.869212
+13,1,Cuyahoga,North Royalton,,$50.00 ,"12771 State Rd, North Royalton, Ohio, 44133",41.3211,-81.723463
+21,1,Cuyahoga,Parma Hts,,$50.00 ,"6339 Olde York Rd Ste 1, Parma Hts, Ohio, 44130",41.391474,-81.759292
+35,2,Franklin,Gahanna,,$50.00 ,"415 Agler Rd, Gahanna, Ohio, 43230",40.019025,-82.892511
+59,1,Holmes,Millersburg,,$50.00 ,"75 E Clinton St Ste 103, Millersburg, Ohio, 44654",40.555369,-81.916372
+61,2,Jefferson,Steubenville,,$50.00 ,"4244 Sunset Blvd Suite D, Steubenville, Ohio, 43952",40.373835,-80.678847
+63,1,Lake,Wickliffe,,$50.00 ,"30170 Euclid Ave, Wickliffe, Ohio, 44092",41.615451,-81.459645
+64,1,Lake,Willowick,,$50.00 ,"31517 Vine St, Willowick, Ohio, 44095",41.642736,-81.466244
+68,2,Licking,Pataskala,,$50.00 ,"318 Township Rd, Pataskala, Ohio, 43062",39.996724,-82.672662
+75,4,Lucas,Oregon,,$50.00 ,"3018 Navarre Ave, Oregon, Ohio, 43616",41.635415,-83.474866
+78,4,Lucas,Sylvania,,$50.00 ,"4900 N Mccord Rd Suite F1, Sylvania, Ohio, 43560",41.704629,-83.703273
+100,2,Perry,New Lexington,,$50.00 ,"600 W Broadway St, New Lexington, Ohio, 43764",39.721024,-82.221532
+111,4,Seneca,Tiffin,,$50.00 ,"457 E Market St, Tiffin, Ohio, 44883",41.118595,-83.166283
+119,1,Summit,Akron (Wolf Ledges),,$50.00 ,"688 Wolf Ledges Pkwy, Akron, Ohio, 44311",41.065031,-81.521113
+120,1,Summit,Barberton,,$50.00 ,"17 5th ST SE, Barberton, Ohio, 44203",41.009826,-81.587719
+124,1,Trumbull,Warren (Mahoning),,$50.00 ,"2750 Mahoning Ave NW, Ste 9, Warren, Ohio, 44483",41.260396,-80.833382
+126,1,Tuscarawas,New Philadelphia,,$50.00 ,"1260 Monroe St NW Ste 11F, New Philadelphia, Ohio, 44663",40.506449,-81.457613`;
 
 function parseCSV(csvText) {
   const lines = csvText.trim().split('\n');

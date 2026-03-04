@@ -40,6 +40,10 @@
   --r-md: 12px;
 }
 
+/* NAV SCROLL FIX - active underline now updates instantly on click */
+#hero, #benefits, #see-it-in-action, #how-it-works, #builder, #faq {
+  scroll-margin-top: 140px;
+}
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -4957,9 +4961,131 @@ html {
     font-size: 14px;
   }
 }
+/* ========================================
+   TESTIMONIAL CAROUSEL — FULL FIX (Desktop + Mobile)
+   Short reviews now snug on phones too
+   ======================================== */
 
+.testimonials-carousel {
+    overflow: hidden !important;
+    min-height: auto !important;
+}
 
-/* =========================================================
-   PHASE 13: CONTACT SECTION
-   New styles will be added here
-   ========================================================= */
+.testimonial-track {
+    display: flex !important;
+    align-items: flex-start !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+.testimonial-slide {
+    flex: 0 0 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 32px 28px 38px !important;
+    margin: 0 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.09) !important;
+}
+
+/* =============== MOBILE =============== */
+@media (max-width: 768px) {
+    .testimonial-slide {
+        padding: 24px 22px 30px !important;   /* tighter padding for phones */
+        min-height: 0 !important;
+    }
+    
+    .stars {
+        margin-bottom: 12px !important;
+    }
+    
+    .testimonial-quote {
+        margin-bottom: 18px !important;
+        font-size: 15px;
+        line-height: 1.55;
+    }
+    
+    .testimonials-carousel {
+        min-height: 245px !important;   /* smaller overall height on mobile */
+    }
+}
+/* Promotional pricing highlight */
+.summary-row.discount[style*="color:#28a745"] {
+  background: rgba(40,167,69,0.06);
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin: 4px 0;
+}
+
+/* LIMITED TIME PROMO BANNER — matches your green success theme */
+.promo-banner {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  padding: 24px 0;
+  margin: 0 16px 32px;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-inner {
+  max-width: var(--builder-max);
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.promo-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.promo-text {
+  flex: 1;
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.promo-text strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.promo-sub {
+  display: block;
+  font-size: 15px;
+  opacity: 0.95;
+  margin-top: 4px;
+}
+
+.promo-cta {
+  white-space: nowrap;
+  font-size: 17px;
+  padding: 14px 28px;
+  background: #fff;
+  color: #28a745;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+@media (max-width: 768px) {
+  .promo-banner { margin: 0 12px 24px; padding: 20px 0; }
+  .promo-inner { flex-direction: column; text-align: center; }
+  .promo-text { font-size: 18px; }
+}
+
+.action-meta {
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .action-meta { font-size: 12.8px; }
+}
+

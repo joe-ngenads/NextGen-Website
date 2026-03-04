@@ -19,9 +19,13 @@
     
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="data.js"></script>
-<script src="script.js"></script>
-<script src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- EmailJS (required for form submissions) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
 </head>
 <body class="builder-body">
 
@@ -31,16 +35,14 @@
                 <img src="NG-sidebyside.png" alt="NextGen Advertising" class="logo">
             </a>
             <nav class="main-nav">
-                <ul class="nav-list">
-                    <li><a href="#hero" class="nav-link">Home</a></li>
-                    <li><a href="#benefits" class="nav-link">Benefits</a></li>
- <li><a href="#see-it-in-action" class="nav-link">Sample Ads</a></li>
-		    <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-                    <li><a href="#builder" class="nav-link">Package Builder</a></li>
-                   
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
+<ul class="nav-list">
+    <li><a href="#hero" class="nav-link">Home</a></li>
+    <li><a href="#benefits" class="nav-link">Benefits</a></li>
+    <li><a href="#see-it-in-action" class="nav-link">Sample Ads</a></li>
+    <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+    <li><a href="#builder" class="nav-link">Package Builder</a></li>
+    <li><a href="#faq" class="nav-link">Questions?</a></li>
+</ul>
             </nav>
 <a href="#builder" class="btn btn-primary cta-btn">Build Your Package →</a>
             <button class="mobile-menu-toggle" aria-label="Toggle Navigation">☰</button>
@@ -49,16 +51,15 @@
 
     <!-- Mobile Menu -->
 <!-- Mobile Menu -->
-    <div class="mobile-menu">
-        <button class="close-menu">×</button>
-        <a href="#hero" class="mobile-nav-link">Home</a>
-        <a href="#benefits" class="mobile-nav-link">Benefits</a>
-        <a href="#builder" class="mobile-nav-link">Package Builder</a>
-        <a href="#see-it-in-action" class="mobile-nav-link">Sample Ads</a>
-        <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
-        <a href="#about" class="mobile-nav-link">About</a>
-        <a href="#contact" class="mobile-nav-link">Contact</a>
-    </div>
+<div class="mobile-menu">
+    <button class="close-menu">×</button>
+    <a href="#hero" class="mobile-nav-link">Home</a>
+    <a href="#benefits" class="mobile-nav-link">Benefits</a>
+    <a href="#builder" class="mobile-nav-link">Package Builder</a>
+    <a href="#see-it-in-action" class="mobile-nav-link">Sample Ads</a>
+    <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+    <a href="#faq" class="mobile-nav-link">Questions?</a>
+</div>
 
     <!-- Main Application -->
     <main id="app" x-data="packageBuilder()" x-init="initApp()">
@@ -72,6 +73,16 @@
 
      ======================================== -->
 <section id="hero" class="main-hero-section">
+<!-- === LIMITED TIME PROMO BANNER === -->
+<div class="promo-banner">
+  <div class="promo-inner">
+    <div class="promo-text">
+      🔥 LIMITED-TIME LAUNCH SPECIAL: First 3 Months at just <strong>$50 per location</strong>! 🔥<br>
+      <span class="promo-sub">(Normally up to $400 — save big before the price goes up)</span>
+    </div>
+    <a href="#builder" class="btn btn-success promo-cta">Build My Package Now →</a>
+  </div>
+</div>
   <div class="hero-bg-overlay"></div>
   <div class="container hero-container">
     <div class="hero-left">
@@ -91,7 +102,7 @@
       </div>
       
       <p class="hero-trust-line">
-        Trusted by <strong>U.S. Army</strong>, <strong>Cleveland Browns</strong>, and Ohio's leading brands
+        Trusted by <strong>U.S. Army</strong>, <strong>Cleveland Browns</strong>, and other leading brands
       </p>
     </div>
     
@@ -184,8 +195,7 @@
             <i class="fas fa-star"></i>
           </div>
           <p class="testimonial-quote">"NextGen's BMV advertising helped us reach thousands of potential customers during their wait times. The captive audience and verified impression data made it a no-brainer for our marketing budget."</p>
-          <cite class="testimonial-author">Sarah Johnson, Marketing Director</cite>
-          <span class="testimonial-company">Ohio Healthcare Network</span>
+          <cite class="testimonial-author">Tom J.</cite>
         </div>
         
         <!-- Testimonial 2 -->
@@ -197,9 +207,10 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
           </div>
-          <p class="testimonial-quote">"We've tried billboards, radio, and digital ads, but nothing compares to the guaranteed eyeballs at BMV locations. Everyone goes there, and they're stuck waiting—it's brilliant."</p>
-          <cite class="testimonial-author">Michael Chen, Owner</cite>
-          <span class="testimonial-company">Chen's Auto Repair & Collision</span>
+          <p class="testimonial-quote">"If you haven’t heard of or worked with the team at NextGen Advertising yet, you’re seriously missing out! Since partnering with them a year ago (and yes, I just renewed!), our ads have been featured in nearly every BMV across Ohio—with incredible results. We’ve had countless clients mention seeing us while at the BMV, and it’s opened up an entirely new and highly effective advertising pipeline for us. Couldn’t be happier with the exposure!
+
+"</p>
+          <cite class="testimonial-author">Jeb J.</cite>
         </div>
         
         <!-- Testimonial 3 -->
@@ -211,9 +222,10 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
           </div>
-          <p class="testimonial-quote">"As a law firm, reaching everyday Ohioans is crucial. BMV advertising put our message in front of exactly who we needed, right when they had time to pay attention. Our intake calls increased by 40%."</p>
-          <cite class="testimonial-author">Jennifer Martinez, Partner</cite>
-          <span class="testimonial-company">Martinez & Associates Law Group</span>
+          <p class="testimonial-quote">"Justin has been great to work with! As a nonprofit, we depend on support from people learning about our mission. NextGen Advertising has given us the opportunity to have tons of visibility and get our mission in front of more people. We've had people already mention seeing our advertisement at a BMV! Thank you Justin and NextGen!
+
+"</p>
+          <cite class="testimonial-author">KaLynn Clark</cite>
         </div>
         
         <!-- Testimonial 4 -->
@@ -225,9 +237,10 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
           </div>
-          <p class="testimonial-quote">"The pricing is transparent, the setup was easy, and the results speak for themselves. We're now running campaigns in 25 BMV locations across the state and seeing consistent ROI month after month."</p>
-          <cite class="testimonial-author">David Thompson, VP of Marketing</cite>
-          <span class="testimonial-company">Thompson Insurance Group</span>
+          <p class="testimonial-quote">"As a non-profit organization, all of our funds and energy goes towards our Mission of serving Veterans and First Responders through our cycling program. Justin from NextGen Advertising reached out to us and provided us an opportunity to get some advertising that would benefit our foundation. This company NextGen Advertising is giving back to their community, NextGen has Integrity, is customer oriented and provides great opportunities for businesses, big and small to successfully engage their target audience through successful marketing ads. If you need exposure and branding assistance, NexGen Advertising should be your Go To, Justin and Joe are both Veterans, please give NextGen a call, Total Awesomeness! Warriors on Wheels Cycling thanks you NextGen Advertising, thank you Justin!
+
+"</p>
+          <cite class="testimonial-author">Gilberto Esparza</cite>
         </div>
         
         <!-- Testimonial 5 -->
@@ -239,10 +252,10 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
           </div>
-          <p class="testimonial-quote">"What impressed me most was the verified impression data. Unlike other advertising where you're guessing, BMV queue reports show exactly how many people saw our ad. That level of accountability is rare."</p>
-          <cite class="testimonial-author">Amanda Rodriguez, CEO</cite>
-          <span class="testimonial-company">Rodriguez Real Estate</span>
-        </div>
+          <p class="testimonial-quote">"Our sales rep, Justin, was incredibly nice to work with and very clear on the program we became involved with. Exposure and branding for our small community theater can sometimes be difficult but Justin made very easy for us. Our digital signage images can be seen at our local BMV offices. Thank you, Justin!
+"</p>
+          <cite class="testimonial-author">Mansfield Playhouse</cite>
+          </div>
         
       </div>
       
@@ -535,7 +548,8 @@
 <!-- PHASE 4: Trusted Organizations Logo Row -->
 
 
- <div class="builder-layout" x-show="step === 1">
+
+
 <div class="builder-page-head">
   <h1>Build Your Advertising Package</h1>
   <p>Select locations, customize your campaign, and review pricing in real time.</p>
@@ -1017,8 +1031,19 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
             </div>
 
             <div class="summary-row">
-              <span>Subtotal:</span>
-              <span x-text="formatCurrency(monthlySubtotal * duration)"></span>
+              <span>Monthly Subtotal (full rate):</span>
+              <span x-text="formatCurrency(monthlySubtotal)"></span>
+            </div>
+
+            <!-- NEW PROMO LINE -->
+            <div class="summary-row discount" style="color:#28a745;font-weight:600;" x-show="promoSavings > 0">
+              <span>Promotional Discount (first 3 months @ $50/location cap):</span>
+              <span x-text="'-' + formatCurrency(promoSavings)"></span>
+            </div>
+
+            <div class="summary-row">
+              <span>Subtotal after promo:</span>
+              <span x-text="formatCurrency(totalBeforeDiscounts)"></span>
             </div>
 
             <!-- Discounts (collapsible) -->
@@ -1095,10 +1120,15 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
 <div class="desktop-action-bar" x-show="showDesktopActionBar" x-cloak>
   <div class="desktop-action-inner">
     <div class="desktop-action-total">
-      <span>Campaign Total:</span>
-      <strong x-text="formatCurrency(grandTotal)"></strong>
+      <div class="action-meta">
+        Locations: <strong x-text="selectedLocations.length"></strong> • 
+        Duration: <strong x-text="duration"></strong> month<span x-text="duration !== 1 ? 's' : ''"></span> • 
+        Ad Type: <strong x-text="placementType === 'premium' ? 'Premium - 60 seconds' : 'Standard - ' + (adType === 'video' ? 'Soundless Video' : 'Static Image') + ' - ' + adLength + ' seconds'"></strong>
+      </div>
+      <div class="action-total-line">
+        Campaign Total: <strong x-text="formatCurrency(grandTotal)"></strong>
+      </div>
     </div>
-
     <div class="desktop-action-buttons">
       <button class="start-over-btn" type="button" @click="resetBuilder()">Start Over</button>
 
@@ -1116,9 +1146,15 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
 
 <div class="mobile-action-bar" x-show="showMobileActionBar" x-cloak>
   <div class="mobile-action-inner">
-    <div class="mobile-action-total">
-      <span>Campaign Total:</span>
-      <strong x-text="formatCurrency(grandTotal)"></strong>
+        <div class="mobile-action-total">
+      <div class="action-meta">
+        Locations: <strong x-text="selectedLocations.length"></strong> • 
+        Duration: <strong x-text="duration"></strong> month<span x-text="duration !== 1 ? 's' : ''"></span> • 
+        Ad Type: <strong x-text="placementType === 'premium' ? 'Premium - 60 seconds' : 'Standard - ' + (adType === 'video' ? 'Soundless Video' : 'Static Image') + ' - ' + adLength + ' seconds'"></strong>
+      </div>
+      <div class="action-total-line">
+        Campaign Total: <strong x-text="formatCurrency(grandTotal)"></strong>
+      </div>
     </div>
 
     <div class="mobile-action-buttons">
@@ -1191,7 +1227,112 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
                 <a href="index.html" class="btn btn-primary">Return Home</a>
             </div>
         </div>
+   <!-- NEW MODAL FORM (updated robust version) -->
+<div class="form-modal" x-show="showFormModal" 
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 9999; 
+            display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; max-width: 620px; width: 100%; border-radius: 12px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 92vh; overflow-y: auto;">
+        
+        <button @click="showFormModal = false" 
+                style="float: right; background: none; border: none; font-size: 28px; cursor: pointer; margin-bottom: 10px;">×</button>
+        
+        <h2 style="margin: 0 0 20px 0; color: #0b74ff;">Finalize Your Campaign</h2>
+        
+        <form @submit.prevent="submitFormModal">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Row 1: First + Last Name -->
+                <div>
+                    <label>First Name</label>
+                    <input type="text" x-model="form.firstName" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" x-model="form.lastName" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
 
+                <!-- Row 2: Business Name (full width) -->
+                <div style="grid-column: 1 / -1;">
+                    <label>Business Name</label>
+                    <input type="text" x-model="form.businessName" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+
+                <!-- Row 3: Email + Phone -->
+                <div>
+                    <label>Email</label>
+                    <input type="email" x-model="form.email" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="tel" x-model="form.phone" @input="formatPhone" required placeholder="(513) 555-0199" style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+
+                <!-- Row 4: Street Address (full) -->
+                <div style="grid-column: 1 / -1;">
+                    <label>Street Address</label>
+                    <input type="text" x-model="form.street" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+
+                <!-- Row 5: City, State, ZIP -->
+                <div>
+                    <label>City</label>
+                    <input type="text" x-model="form.city" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+                <div>
+                    <label>State</label>
+                    <select x-model="form.state" required style="width:100%; padding:10px; margin-top:5px; height: 42px;">
+                        <option value="">Select State</option>
+                        <option value="OH" selected>Ohio</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="IN">Indiana</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="MI">Michigan</option>
+                        <!-- Full US list available if you want it later -->
+                    </select>
+                </div>
+                <div>
+                    <label>ZIP Code</label>
+                    <input type="text" x-model="form.zip" maxlength="10" required style="width:100%; padding:10px; margin-top:5px;">
+                </div>
+            </div>
+
+            <div style="margin: 25px 0; padding: 20px; background: #f8f9fc; border-radius: 8px; line-height: 1.5;">
+                <strong>Campaign Total:</strong> <span x-text="formatCurrency(grandTotal)"></span><br>
+                <span x-text="duration"></span> months • 
+                <span x-text="selectedLocations.length"></span> locations • 
+                Ad Type: <span x-text="placementType === 'premium' ? 'Premium - 60 seconds' : 'Standard - ' + (adType === 'video' ? 'Soundless Video' : 'Static Image') + ' - ' + adLength + ' seconds'"></span>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button type="button" @click="showFormModal = false" 
+                        class="btn btn-outline" style="flex: 1;">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Submit & Send to NextGen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <!-- SUCCESS MODAL - stays open until user clicks OK -->
+    <div class="success-modal" x-show="showSuccessModal" 
+         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 9999; 
+                display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; max-width: 520px; width: 100%; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            
+            <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
+            
+            <h2 style="margin: 0 0 15px 0; color: #28a745;">Package Submitted!</h2>
+            <p style="font-size: 18px; line-height: 1.6; color: #333; margin-bottom: 30px;">
+                We received your details and will email you the contract shortly.<br>
+                Thank you for choosing NextGen Advertising!
+            </p>
+            
+            <button @click="closeSuccessModal()" 
+                    class="btn btn-primary" 
+                    style="padding: 14px 40px; font-size: 18px;">
+                OK
+            </button>
+        </div>
+    </div>
  </main>
 
 <!-- ========================================
@@ -1269,7 +1410,7 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
           </svg>
         </button>
         <div class="faq-answer" x-show="openIndex === 5" x-collapse>
-          <p><strong>Location Discounts:</strong> 2-49 locations (10% off), 50-99 locations (20% off), 100+ locations (25% off)<br>
+          <p><strong>Location Discounts:</strong> 1-9 locations (0% off), 10-24 locations (10% off), 25-49 locations (15% off), 50-99 locations (20% off), 100+ locations (25% off)<br>
           <strong>Duration Discounts:</strong> 3-5 months (10% off), 6-11 months (20% off), 12 months (25% off)<br>
           Discounts stack! A 12-month campaign across 50+ locations receives both the 25% duration discount and 20% location discount. Use our real-time pricing calculator to see your exact savings.</p>
         </div>
@@ -1359,9 +1500,9 @@ Need Creative Design?  <br class="mobile-break">-$200 one-time- <span class="not
     
     <!-- CTA after FAQ -->
     <div class="faq-cta">
-      <p>Still have questions?</p>
-      <a href="#contact" class="btn btn-primary">Contact Us</a>
-    </div>
+  <p>Still have questions?</p>
+  <a href="mailto:info@ngenads.com" class="btn btn-primary">info@ngenads.com</a>
+</div>
     
   </div>
 </section>
